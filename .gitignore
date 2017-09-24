@@ -93,3 +93,7 @@ pip-selfcheck.json
 /bower_components
 /*.sublime-workspace
 assets/bundles
+.idea/
+
+# Zappa
+zappa_settings.json
