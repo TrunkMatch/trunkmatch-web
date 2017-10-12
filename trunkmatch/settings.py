@@ -25,7 +25,8 @@ SECRET_KEY = '#az&(*us*d_6g-tv#7lq)1@h6h6z(e=&y(t_z^r*a*jyiqo)i+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = eval(is_local)
+# DEBUG = eval(is_local)
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'dev.trunkmatch.com']
 
@@ -39,19 +40,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
     'tm_main',
     'tm_match',
     'tm_trunk',
     'tm_pictures',
     'tm_api',
-    'rest_framework',
-    'rest_framework.authtoken',
     'taggit',
-    'rest_auth',
-    'storages',
-    'allauth',
-    'allauth.account',
-    'rest_auth.registration',
+    'storages'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -82,6 +83,11 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 WSGI_APPLICATION = 'trunkmatch.wsgi.application'
 
@@ -159,5 +165,8 @@ REST_FRAMEWORK = {
 }
 
 ACCOUNT_EMAIL_VERIFICATION='None'
-
 ACCOUNT_LOGOUT_ON_GET = True
+AUTH_USER_MODEL = 'tm_main.Profile'
+ACCOUNT_ADAPTER = "tm_main.auth.registration.AccountAdapter"
+REST_AUTH_REGISTER_SERIALIZERS = { 'REGISTER_SERIALIZER': "tm_main.serializers.serializers.RegistrationSerializer", }
+

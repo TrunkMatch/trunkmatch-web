@@ -1,13 +1,13 @@
-from django.contrib.auth.models import User
 from django.db import models
 from taggit.managers import TaggableManager
 
+from tm_main.models import Profile
 from tm_pictures.enums import SEASON, GENDER, PIECE
 
 
 class Trunk(models.Model):
     """Model for Trunks that are for sale"""
-    owner = models.ForeignKey(User, blank=False, null=False, related_name='owning_user')
+    owner = models.ForeignKey(Profile, blank=False, null=False, related_name='owning_user')
     description = models.CharField(max_length=512, default="")
 
     def __str__(self):
@@ -16,7 +16,7 @@ class Trunk(models.Model):
 
 class PurchaseOrder(models.Model):
     """Model for Trunks purchase events"""
-    buyer = models.ForeignKey(User, blank=False, null=False, related_name='trunk_buyer')
+    buyer = models.ForeignKey(Profile, blank=False, null=False, related_name='trunk_buyer')
     trunk = models.ForeignKey(Trunk, blank=False, null=False, related_name='purchased_trunk')
 
     initiation_date = models.DateTimeField(default=None, null=True, blank=True)
