@@ -9,7 +9,7 @@ class MatchList(models.Model):
     profile = models.OneToOneField(Profile)
 
     def __str__(self):
-        return self.profile.user.username
+        return self.profile.username
 
     class Meta:
         ordering = ["profile"]
@@ -18,12 +18,9 @@ class MatchList(models.Model):
 class MatchListEvent(models.Model):
     """Model to store matching list attributes"""
     match_list = models.ForeignKey('MatchList', blank=False, null=False, related_name='match_list')
-    subscriber = models.ForeignKey(User, blank=False, null=False, related_name='match_list_subscriber')
+    subscriber = models.ForeignKey(Profile, blank=False, null=False, related_name='match_list_subscriber')
 
     join_timestamp = models.DateTimeField(default=None, null=True, blank=True)
 
     def __str__(self):
-        return self.match_list.profile.user.username
-
-    class Meta:
-        ordering = ["match_list__profile__user"]
+        return self.match_list.profile.username

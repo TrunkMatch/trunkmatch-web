@@ -1,11 +1,14 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
 
 
-class Profile(models.Model):
-    """Model to extend the Django User"""
-    user = models.OneToOneField(User)
+class Profile(AbstractUser):
+    email = models.EmailField(unique=True)
+    username = models.CharField(max_length=40, unique=True, blank=True)
+
+    first_name = models.CharField(max_length=40, blank=True)
+    last_name = models.CharField(max_length=40, blank=True)
 
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered in the format: '+999999999'. Up to 15 digits.")
@@ -15,11 +18,20 @@ class Profile(models.Model):
     follows = models.ManyToManyField('self', related_name='profile_followers', symmetrical=False, blank=True,
                                      default=None)
 
-    def __str__(self):
-        return self.user.username
+    is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
 
-    class Meta:
-        ordering = ["user"]
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return self.email
+
+    def get_full_name(self):
+        return self.first_name + " " + self.last_name
+
+    def get_short_name(self):
+        return self.first_name
 
 
 class Country(models.Model):
